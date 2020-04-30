@@ -7,7 +7,7 @@ namespace DefaultNamespace {
     }
 
 
-    public class CharacterMoveController : MonoBehaviour {
+    public class MoveController : MonoBehaviour {
         public float Speed;
         public Animator animator;
         public Material material;

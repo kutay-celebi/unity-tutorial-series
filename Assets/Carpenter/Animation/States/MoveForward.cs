@@ -2,14 +2,15 @@
 using UnityEngine;
 
 namespace Carpenter.Animation.Player {
-    
+    /**
+     * This class where forward walking behaviour is defined.
+     */
     [CreateAssetMenu(fileName = "New State", menuName = "Carpenter/AbilityData/MoveForward")]
     public class MoveForward : BaseStateData {
-
         public float speed;
-        
+
         public override void UpdateAbility(BaseStateMachineBehaviour baseStateMachineBehaviour, Animator animator) {
-            CharacterMoveController controller = baseStateMachineBehaviour.GetMoveController(animator);
+            MoveController controller = baseStateMachineBehaviour.GetMoveController(animator);
             if (VirtualInputManager.Instance.moveRight && VirtualInputManager.Instance.moveLeft) {
                 animator.SetBool(TransitionParameter.move.ToString(), false);
                 return;
