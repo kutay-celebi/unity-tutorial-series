@@ -1,7 +1,7 @@
 ﻿using DefaultNamespace;
 using UnityEngine;
 
-public class MoveCube : MonoBehaviour {
+public class CharacterMoveController : MonoBehaviour {
     public float Speed;
     
     // Update is called once per frame
