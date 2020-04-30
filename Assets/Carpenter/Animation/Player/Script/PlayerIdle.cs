@@ -2,6 +2,9 @@
 using UnityEngine;
 
 namespace Carpenter.Animation.Player {
+    /**
+     * For state in an animator. This class where the idle behavior of the model is managed.
+     */
     public class PlayerIdle : BaseStateMachineBehaviour {
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         }
