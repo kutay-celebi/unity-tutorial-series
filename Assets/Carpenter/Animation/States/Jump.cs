@@ -12,7 +12,7 @@ namespace Carpenter.Animation.Player {
         }
 
         public override void OnEnter(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
-            baseBehaviour.GetMoveController(animator).RIGID_BODY.AddForce(Vector3.up * jumpForce);
+            baseBehaviour.GetMoveController(animator).Rigidbody.AddForce(Vector3.up * jumpForce);
         }
 
         public override void OnExit(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {

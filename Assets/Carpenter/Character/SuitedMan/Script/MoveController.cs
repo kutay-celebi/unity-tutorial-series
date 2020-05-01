@@ -7,7 +7,8 @@ namespace DefaultNamespace {
     public enum TransitionParameter {
         move,
         jump,
-        forceTransition
+        forceTransition,
+        grounded
     }
 
     //todo create base controller.
@@ -16,7 +17,7 @@ namespace DefaultNamespace {
         public Material material;
         public GameObject colliderEdge;
 
-        private List<GameObject> bottomSpheres;
+        public readonly List<GameObject> bottomSpheres = new List<GameObject>();
 
         // Update is called once per frame
         void Update() {
@@ -37,19 +38,29 @@ namespace DefaultNamespace {
 
         private void Awake() {
             BoxCollider box    = GetComponent<BoxCollider>();
-            float       bottom = box.bounds.center.y - box.bounds.extents.y;
-            float       top    = box.bounds.center.y + box.bounds.extents.y;
-            float       front  = box.bounds.center.z + box.bounds.extents.z;
-            float       back   = box.bounds.center.z - box.bounds.extents.z;
+            var bounds = box.bounds;
+            float       bottom = bounds.center.y - bounds.extents.y;
+            float       top    = bounds.center.y + bounds.extents.y;
+            float       front  = bounds.center.z + bounds.extents.z;
+            float       back   = bounds.center.z - bounds.extents.z;
 
             GameObject bottomFront = CreateEdgeSphere(new Vector3(0f, bottom, front));
-            GameObject bottomBack = CreateEdgeSphere(new Vector3(0f, bottom, back));
+            GameObject bottomBack  = CreateEdgeSphere(new Vector3(0f, bottom, back));
 
-            bottomFront.transform.parent = transform;
-
-            bottomBack.transform.parent = transform;
+            Transform transform1 = transform;
+            bottomFront.transform.parent = transform1;
+            bottomBack.transform.parent = transform1;
             bottomSpheres.Add(bottomBack);
             bottomSpheres.Add(bottomFront);
+
+            float vectorSection = (bottomFront.transform.position - bottomBack.transform.position).magnitude / 5f;
+
+            for (int i = 0; i < 4; i++) {
+                Vector3    pos       = bottomBack.transform.position + (Vector3.forward * vectorSection * (i + 1));
+                GameObject newSphere = CreateEdgeSphere(pos);
+                newSphere.transform.parent = this.transform;
+                bottomSpheres.Add(newSphere);
+            }
         }
 
         public GameObject CreateEdgeSphere(Vector3 position) {
