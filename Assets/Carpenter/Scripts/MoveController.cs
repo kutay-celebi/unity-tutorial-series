@@ -3,14 +3,21 @@ using UnityEngine;
 
 namespace DefaultNamespace {
     public enum TransitionParameter {
-        move
+        move,
+        jump,
+        forceTransition
     }
 
-
+    //todo create base controller.
     public class MoveController : MonoBehaviour {
         public float Speed;
         public Animator animator;
         public Material material;
+
+
+        public bool moveRight;
+        public bool moveLeft;
+        public bool jump;
 
         // Update is called once per frame
         void Update() {

@@ -15,6 +15,12 @@ namespace DefaultNamespace {
             } else {
                 VirtualInputManager.Instance.moveLeft = false;
             }
+
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                VirtualInputManager.Instance.jump = true;
+            } else {
+                VirtualInputManager.Instance.jump = false;
+            }
                 
         }
     }

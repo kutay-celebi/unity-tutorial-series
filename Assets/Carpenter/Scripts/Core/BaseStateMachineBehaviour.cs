@@ -16,20 +16,34 @@ namespace DefaultNamespace {
          * <summary>
          * Moving controller for model. <see cref="MoveController"/>
          * </summary>
+         *
+         * todo create base controller.
          */
         private MoveController moveController;
 
         /**
          * <summary>Updates all states in list of state </summary>
          */
-        public void UpdateAll(BaseStateMachineBehaviour stateBase, Animator animator) {
+        public void UpdateAll(BaseStateMachineBehaviour stateBase, Animator animator, AnimatorStateInfo stateInfo) {
             foreach (BaseStateData data in listAbilityData) {
-                data.UpdateAbility(stateBase, animator);
+                data.UpdateAbility(stateBase, animator, stateInfo);
+            }
+        }
+
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+            foreach (BaseStateData data in listAbilityData) {
+                data.OnEnter(this, animator, stateInfo);
+            }
+        }
+
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+            foreach (BaseStateData data in listAbilityData) {
+                data.OnExit(this, animator, stateInfo);
             }
         }
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-            UpdateAll(this, animator);
+            UpdateAll(this, animator, stateInfo);
         }
 
         /**
