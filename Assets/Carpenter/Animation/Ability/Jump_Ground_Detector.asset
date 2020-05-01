@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Jump_Ground_Detector
   m_EditorClassIdentifier: 
   duration: 0
-  distance: 0.01
+  checkTime: 0.2
+  distance: 0.2

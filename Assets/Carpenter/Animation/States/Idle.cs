@@ -14,10 +14,11 @@ namespace Carpenter.Animation.Player {
 
             animator.SetBool(TransitionParameter.jump.ToString(), controller.jump);
 
+            if (controller.moveRight && controller.moveLeft) {
+                return;
+            }
+
             animator.SetBool(TransitionParameter.move.ToString(), controller.moveRight || controller.moveLeft);
-            Debug.Log(controller.moveRight || controller.moveLeft);
-            Debug.Log(controller.moveRight);
-            Debug.Log(controller.moveLeft);
         }
 
         public override void OnEnter(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
