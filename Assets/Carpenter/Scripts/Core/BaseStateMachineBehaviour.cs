@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DefaultNamespace.Controller;
 using UnityEngine;
 
 namespace DefaultNamespace {
@@ -19,7 +20,7 @@ namespace DefaultNamespace {
          *
          * todo create base controller.
          */
-        private MoveController moveController;
+        private BaseMoveController moveController;
 
         /**
          * <summary>Updates all states in list of state </summary>
@@ -49,7 +50,7 @@ namespace DefaultNamespace {
         /**
          * Return <see cref="moveController"/> of model.
          */
-        public MoveController GetMoveController(Animator animator) {
+        public BaseMoveController GetMoveController(Animator animator) {
             if (moveController == null) {
                 moveController = animator.GetComponentInParent<MoveController>();
             }

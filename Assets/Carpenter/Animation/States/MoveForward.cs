@@ -1,16 +1,15 @@
 ﻿using Carpenter.Constants;
 using DefaultNamespace;
+using DefaultNamespace.Controller;
 using UnityEngine;
 
 namespace Carpenter.Animation.Player {
     [CreateAssetMenu(fileName = "New File", menuName = AssetMenuConstants.ABILITY_PATHS + "MoveForward", order = 0)]
     public class MoveForward : BaseStateData {
-        
         public float speed;
 
-        public override void UpdateAbility(BaseStateMachineBehaviour baseStateMachineBehaviour, Animator animator,
-                                           AnimatorStateInfo stateInfo) {
-            MoveController controller = baseStateMachineBehaviour.GetMoveController(animator);
+        public override void UpdateAbility(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
+            BaseMoveController controller = baseBehaviour.GetMoveController(animator);
             if (controller.moveRight && controller.moveLeft) {
                 animator.SetBool(TransitionParameter.move.ToString(), false);
                 return;
@@ -32,13 +31,12 @@ namespace Carpenter.Animation.Player {
             }
         }
 
-        public override void OnEnter(BaseStateMachineBehaviour baseStateMachineBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
+        public override void OnEnter(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
             // throw new System.NotImplementedException();
         }
 
-        public override void OnExit(BaseStateMachineBehaviour baseStateMachineBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
+        public override void OnExit(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
             // throw new System.NotImplementedException();
         }
-        
     }
 }

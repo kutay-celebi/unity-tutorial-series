@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1714127392}
   - component: {fileID: 1714127395}
   - component: {fileID: 1714127394}
-  - component: {fileID: 1714127393}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -59,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 70bb910fa5985d44fbc44df84c4eb8cb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,19 +79,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1714127393
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714127391}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2791923480313638728
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,8 +90,11 @@ GameObject:
   - component: {fileID: 5412356060417366333}
   - component: {fileID: 7660512762862123307}
   - component: {fileID: 7234048395930417392}
+  - component: {fileID: 1034441794}
+  - component: {fileID: 1034441792}
+  - component: {fileID: 1034441795}
   m_Layer: 0
-  m_Name: SuitedMan
+  m_Name: SuitedManPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,8 +128,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aea6746054eb94e41a1ac31e4b879909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 3
   animator: {fileID: 2766122016670796026}
+  RIGID_BODY: {fileID: 1034441794}
+  moveRight: 0
+  moveLeft: 0
+  jump: 0
+  Speed: 1.8
+  material: {fileID: 2100000, guid: 70bb910fa5985d44fbc44df84c4eb8cb, type: 2}
 --- !u!114 &7234048395930417392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,6 +147,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f17bdd504bb7749a5d252e2af48858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &1034441794
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2791923480313638728}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1034441792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2791923480313638728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4126ef3982244bc58c29b0dbe503cae1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1034441795
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2791923480313638728}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.42978376, y: 1.8542527, z: 0.38767785}
+  m_Center: {x: 0, y: 0.91621023, z: 0.0070972443}
 --- !u!1001 &2766122016680197530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,6 +251,26 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 13700000, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70bb910fa5985d44fbc44df84c4eb8cb, type: 2}
+    - target: {fileID: 13700002, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70bb910fa5985d44fbc44df84c4eb8cb, type: 2}
+    - target: {fileID: 13700004, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70bb910fa5985d44fbc44df84c4eb8cb, type: 2}
+    - target: {fileID: 13700006, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70bb910fa5985d44fbc44df84c4eb8cb, type: 2}
+    - target: {fileID: 13700008, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70bb910fa5985d44fbc44df84c4eb8cb, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
 --- !u!4 &2766122016680060544 stripped
