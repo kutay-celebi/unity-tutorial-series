@@ -30,15 +30,18 @@ namespace Carpenter.Animation.Player {
         }
 
         bool IsGrounded(MoveController controller) {
-            if (controller.RIGID_BODY.velocity.y > -0.01f && controller.RIGID_BODY.velocity.y <= 0f) {
+            if (controller.RIGID_BODY.velocity.y > -0.001f && controller.RIGID_BODY.velocity.y <= 0f) {
                 return true;
             }
 
-            foreach (GameObject sphere in controller.bottomSpheres) {
-                // Debug.DrawRay(sphere.transform.position, -Vector3.up * distance, Color.yellow);
-                RaycastHit hit;
-                if (Physics.Raycast(sphere.transform.position, -Vector3.up, out hit, distance)) {
-                    return true;
+            // if the character fall down.
+            if (controller.RIGID_BODY.velocity.y < 0 ) {
+                foreach (GameObject sphere in controller.bottomSpheres) {
+                    // Debug.DrawRay(sphere.transform.position, -Vector3.up * distance, Color.yellow);
+                    RaycastHit hit;
+                    if (Physics.Raycast(sphere.transform.position, -Vector3.up, out hit, distance)) {
+                        return true;
+                    }
                 }
             }
 
