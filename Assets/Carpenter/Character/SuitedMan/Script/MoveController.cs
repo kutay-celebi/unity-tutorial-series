@@ -14,6 +14,10 @@ namespace DefaultNamespace {
 
     //todo create base controller.
     public class MoveController : BaseMoveController {
+        [Header("Gravity")]
+        public float gravityMultiplier;
+        public float pullMultiplier;
+
         public float Speed;
         public Material material;
         public GameObject colliderEdge;
@@ -23,6 +27,12 @@ namespace DefaultNamespace {
 
         // Update is called once per frame
         void Update() {
+        }
+
+        private void FixedUpdate() {
+            if (Rigidbody.velocity.y < 0f) {
+                Rigidbody.velocity += -Vector3.up * gravityMultiplier;
+            }
         }
 
         public void ChangeMaterial() {

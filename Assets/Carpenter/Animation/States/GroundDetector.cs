@@ -30,12 +30,12 @@ namespace Carpenter.Animation.Player {
         }
 
         bool IsGrounded(MoveController controller) {
-            if (controller.RIGID_BODY.velocity.y > -0.001f && controller.RIGID_BODY.velocity.y <= 0f) {
+            if (controller.Rigidbody.velocity.y > -0.001f && controller.Rigidbody.velocity.y <= 0f) {
                 return true;
             }
 
             // if the character fall down.
-            if (controller.RIGID_BODY.velocity.y < 0 ) {
+            if (controller.Rigidbody.velocity.y < 0 ) {
                 foreach (GameObject sphere in controller.bottomSpheres) {
                     // Debug.DrawRay(sphere.transform.position, -Vector3.up * distance, Color.yellow);
                     RaycastHit hit;

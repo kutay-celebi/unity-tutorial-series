@@ -2,10 +2,13 @@
 
 namespace DefaultNamespace.Controller {
     public class BaseMoveController : MonoBehaviour {
+        
+        [Header("Animator")]
         public Animator animator;
+        // public Rigidbody RIGID_BODY;
         private Rigidbody rigidbody;
-        public Rigidbody RIGID_BODY;
 
+        [Header("Movement Variable")]
         public bool moveRight;
         public bool moveLeft;
         public bool jump;
