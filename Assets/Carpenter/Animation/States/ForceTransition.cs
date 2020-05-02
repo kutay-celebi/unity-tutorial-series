@@ -12,18 +12,17 @@ namespace Carpenter.Animation.Player {
         [Range(0.01f, 1f)]
         public float transitionTiming;
 
-        public override void UpdateAbility(BaseStateMachineBehaviour baseStateMachineBehaviour, Animator animator,
-                                           AnimatorStateInfo stateInfo) {
+        public override void UpdateAbility(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
             if (stateInfo.normalizedTime >= transitionTiming) {
                 animator.SetBool(TransitionParameter.forceTransition.ToString(), true);
             }
         }
 
-        public override void OnEnter(BaseStateMachineBehaviour baseStateMachineBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
+        public override void OnEnter(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
             // throw new NotImplementedException();
         }
 
-        public override void OnExit(BaseStateMachineBehaviour baseStateMachineBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
+        public override void OnExit(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
             animator.SetBool(TransitionParameter.forceTransition.ToString(), false);
         }
     }
