@@ -33,6 +33,10 @@ namespace DefaultNamespace {
             if (Rigidbody.velocity.y < 0f) {
                 Rigidbody.velocity += -Vector3.up * gravityMultiplier;
             }
+
+            if (Rigidbody.velocity.y > 0f && jump) {
+                Rigidbody.velocity += (-Vector3.up * pullMultiplier);
+            }
         }
 
         public void ChangeMaterial() {

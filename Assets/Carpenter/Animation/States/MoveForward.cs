@@ -28,18 +28,18 @@ namespace Carpenter.Animation.Player {
             }
 
             if (controller.moveRight) {
+                controller.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 if (CheckFront((MoveController) controller)) {
                     controller.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(stateInfo.normalizedTime) *
                                                    Time.deltaTime);
-                    controller.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 }
             }
 
             if (controller.moveLeft) {
+                controller.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
                 if (CheckFront((MoveController) controller)) {
                     controller.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(stateInfo.normalizedTime) *
                                                    Time.deltaTime);
-                    controller.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
                 }
             }
         }
