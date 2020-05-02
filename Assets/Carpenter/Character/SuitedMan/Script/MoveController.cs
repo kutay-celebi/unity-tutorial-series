@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Carpenter.Constants;
 using DefaultNamespace.Controller;
@@ -24,6 +25,7 @@ namespace DefaultNamespace {
 
         public readonly List<GameObject> bottomSpheres = new List<GameObject>();
         public readonly List<GameObject> frontSpheres = new List<GameObject>();
+        public List<Collider> ragdollParts = new List<Collider>();
 
         // Update is called once per frame
         void Update() {
@@ -55,9 +57,12 @@ namespace DefaultNamespace {
         private void Awake() {
             CreateSphereOnSection(Side.BOTTOM, 6, bottomSpheres);
             CreateSphereOnSection(Side.FRONT, 10, frontSpheres);
+            SetRagdollParts();
         }
 
-
+        /**
+         * Create spheres to check if this object are touching an other object.
+         */
         private void CreateSphereOnSection(Side side, int point, List<GameObject> sphereList) {
             // get collider center point.
             BoxCollider box    = GetComponent<BoxCollider>();
@@ -98,6 +103,38 @@ namespace DefaultNamespace {
         public GameObject CreateEdgeSphere(Vector3 position) {
             GameObject obj = Instantiate(colliderEdge, position, Quaternion.identity);
             return obj;
+        }
+
+        private void SetRagdollParts() {
+            Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
+
+            foreach (Collider collider in colliders) {
+                if (collider.gameObject != gameObject) {
+                    collider.isTrigger = true;
+                    ragdollParts.Add(collider);
+                }
+            }
+        }
+
+        // private IEnumerator Start() {
+        //     yield return new WaitForSeconds(5f);
+        //     Rigidbody.AddForce(200f * Vector3.up);
+        //     yield return new WaitForSeconds(0.5f);
+        //     TurnOnRagdoll();
+        // }
+
+        public void TurnOnRagdoll() {
+            Rigidbody.useGravity                           = false;
+            Rigidbody.velocity                             = Vector3.zero;
+            gameObject.GetComponent<BoxCollider>().enabled = true;
+            animator.enabled                               = false;
+            animator.avatar                                = null;
+
+            foreach (Collider part in ragdollParts) {
+                part.isTrigger                  = false;
+                part.attachedRigidbody.velocity = Vector3.zero;
+                ;
+            }
         }
     }
 }

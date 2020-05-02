@@ -1,4 +1,5 @@
-﻿using Carpenter.Constants;
+﻿using System.Linq;
+using Carpenter.Constants;
 using DefaultNamespace;
 using DefaultNamespace.Controller;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace Carpenter.Animation.Player {
         public AnimationCurve speedGraph;
         public float speed;
         public float blockDistance;
+        
+        private bool selfCollider;
 
         public override void UpdateAbility(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
             BaseMoveController controller = baseBehaviour.GetMoveController(animator);
@@ -56,8 +59,15 @@ namespace Carpenter.Animation.Player {
         bool CheckFront(MoveController controller) {
             foreach (GameObject sphere in controller.frontSpheres) {
                 // Debug.DrawRay(sphere.transform.position, controller.transform.forward * blockDistance, Color.yellow);
+                selfCollider = false;
                 RaycastHit hit;
-                if (Physics.Raycast(sphere.transform.position, controller.transform.forward, out hit, blockDistance)) {
+                if (!Physics.Raycast(sphere.transform.position, controller.transform.forward, out hit, blockDistance)) continue;
+                foreach (var part in controller.ragdollParts.Where(part => part.gameObject == hit.collider.gameObject)) {
+                    selfCollider = true;
+                    break;
+                }
+
+                if (!selfCollider) {
                     return false;
                 }
             }
