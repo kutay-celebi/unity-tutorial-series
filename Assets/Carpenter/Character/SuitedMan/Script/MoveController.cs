@@ -10,7 +10,8 @@ namespace DefaultNamespace {
         move,
         jump,
         forceTransition,
-        grounded
+        grounded,
+        attack
     }
 
     //todo create base controller.
@@ -133,7 +134,6 @@ namespace DefaultNamespace {
             foreach (Collider part in ragdollParts) {
                 part.isTrigger                  = false;
                 part.attachedRigidbody.velocity = Vector3.zero;
-                ;
             }
         }
     }

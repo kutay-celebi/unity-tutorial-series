@@ -22,10 +22,16 @@ namespace DefaultNamespace {
                 _controller.moveLeft = false;
             }
             
-            if (Input.GetKeyDown(KeyCode.Space)) {
+            if (VirtualInputManager.Instance.jump) {
                 _controller.jump = true;
             } else {
                 _controller.jump = false;
+            }
+            
+            if (VirtualInputManager.Instance.attack) {
+                _controller.attack = true;
+            } else {
+                _controller.attack = false;
             }
         }
     }

@@ -38,4 +38,5 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   speed: 1.8
-  blockDistance: 0.5
+  blockDistance: 0.05
+  constant: 0

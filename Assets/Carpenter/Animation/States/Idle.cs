@@ -19,6 +19,8 @@ namespace Carpenter.Animation.Player {
             }
 
             animator.SetBool(TransitionParameter.move.ToString(), controller.moveRight || controller.moveLeft);
+            
+            animator.SetBool(TransitionParameter.attack.ToString(), controller.attack);
         }
 
         public override void OnEnter(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
