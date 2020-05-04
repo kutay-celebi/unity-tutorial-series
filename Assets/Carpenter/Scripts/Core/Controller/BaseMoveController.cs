@@ -4,7 +4,7 @@ namespace DefaultNamespace.Controller {
     public class BaseMoveController : MonoBehaviour {
         
         [Header("Animator")]
-        public Animator animator;
+        public Animator skinnedMashAnimator;
         // public Rigidbody RIGID_BODY;
         private Rigidbody rigidbody;
 

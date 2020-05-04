@@ -27,6 +27,7 @@ namespace DefaultNamespace {
         public readonly List<GameObject> bottomSpheres = new List<GameObject>();
         public readonly List<GameObject> frontSpheres = new List<GameObject>();
         public List<Collider> ragdollParts = new List<Collider>();
+        public List<Collider> collidingParts = new List<Collider>();
 
         // Update is called once per frame
         void Update() {
@@ -42,6 +43,80 @@ namespace DefaultNamespace {
             }
         }
 
+        private void Awake() {
+            CreateSphereOnSection(Side.BOTTOM, 6, bottomSpheres);
+            CreateSphereOnSection(Side.FRONT, 10, frontSpheres);
+            SetRagdollParts();
+
+            bool switchBack = !IsFacingForward();
+
+            FaceForward(true);
+
+            if (switchBack) {
+                FaceForward(false);
+            }
+        }
+
+        private void SetRagdollParts() {
+            Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
+
+            foreach (Collider collider in colliders) {
+                if (collider.gameObject != gameObject) {
+                    collider.isTrigger = true;
+                    ragdollParts.Add(collider);
+                }
+            }
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            if (ragdollParts.Contains(other)) {
+                return;
+            }
+
+            // get the controller of the touched object.
+            MoveController controller = transform.GetComponent<MoveController>();
+            if (controller != null && other.gameObject != gameObject) {
+                if (!collidingParts.Contains(other)) {
+                    collidingParts.Add(other);
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other) {
+            if (collidingParts.Contains(other)) {
+                collidingParts.Remove(other);
+            }
+        }
+
+        public void MoveForward(float speed, float speedGraph) {
+            transform.Translate(Vector3.forward * speed * speedGraph *Time.deltaTime);
+        }
+
+        public void FaceForward(bool forward) {
+            if (forward) {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            } else {
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            }
+        }
+
+        public bool IsFacingForward() {
+            return transform.forward.z > 0f;
+        }
+
+        public void TurnOnRagdoll() {
+            Rigidbody.useGravity                           = false;
+            Rigidbody.velocity                             = Vector3.zero;
+            gameObject.GetComponent<BoxCollider>().enabled = true;
+            skinnedMashAnimator.enabled                    = false;
+            skinnedMashAnimator.avatar                     = null;
+
+            foreach (Collider part in ragdollParts) {
+                part.isTrigger                  = false;
+                part.attachedRigidbody.velocity = Vector3.zero;
+            }
+        }
+
         public void ChangeMaterial() {
             if (material == null) {
                 throw new Exception("Material is null");
@@ -53,12 +128,6 @@ namespace DefaultNamespace {
                     r.material = material;
                 }
             }
-        }
-
-        private void Awake() {
-            CreateSphereOnSection(Side.BOTTOM, 6, bottomSpheres);
-            CreateSphereOnSection(Side.FRONT, 10, frontSpheres);
-            SetRagdollParts();
         }
 
         /**
@@ -104,37 +173,6 @@ namespace DefaultNamespace {
         public GameObject CreateEdgeSphere(Vector3 position) {
             GameObject obj = Instantiate(colliderEdge, position, Quaternion.identity);
             return obj;
-        }
-
-        private void SetRagdollParts() {
-            Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
-
-            foreach (Collider collider in colliders) {
-                if (collider.gameObject != gameObject) {
-                    collider.isTrigger = true;
-                    ragdollParts.Add(collider);
-                }
-            }
-        }
-
-        // private IEnumerator Start() {
-        //     yield return new WaitForSeconds(5f);
-        //     Rigidbody.AddForce(200f * Vector3.up);
-        //     yield return new WaitForSeconds(0.5f);
-        //     TurnOnRagdoll();
-        // }
-
-        public void TurnOnRagdoll() {
-            Rigidbody.useGravity                           = false;
-            Rigidbody.velocity                             = Vector3.zero;
-            gameObject.GetComponent<BoxCollider>().enabled = true;
-            animator.enabled                               = false;
-            animator.avatar                                = null;
-
-            foreach (Collider part in ragdollParts) {
-                part.isTrigger                  = false;
-                part.attachedRigidbody.velocity = Vector3.zero;
-            }
         }
     }
 }

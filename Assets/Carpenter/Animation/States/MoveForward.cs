@@ -23,9 +23,9 @@ namespace Carpenter.Animation.Player {
             }
 
             if (constant) {
-                ConstantMove(controller, animator, stateInfo);
+                ConstantMove((MoveController) controller, animator, stateInfo);
             } else {
-                ControlledMove(controller, animator, stateInfo);
+                ControlledMove((MoveController) controller, animator, stateInfo);
             }
         }
 
@@ -37,14 +37,13 @@ namespace Carpenter.Animation.Player {
             // do nothing
         }
 
-        private void ConstantMove(BaseMoveController controller, Animator animator, AnimatorStateInfo stateInfo) {
-            if (CheckFront((MoveController) controller)) {
-                controller.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(stateInfo.normalizedTime) *
-                                               Time.deltaTime);
+        private void ConstantMove(MoveController controller, Animator animator, AnimatorStateInfo stateInfo) {
+            if (CheckFront(controller)) {
+                controller.MoveForward(speed, speedGraph.Evaluate(stateInfo.normalizedTime));
             }
         }
 
-        private void ControlledMove(BaseMoveController controller, Animator animator, AnimatorStateInfo stateInfo) {
+        private void ControlledMove(MoveController controller, Animator animator, AnimatorStateInfo stateInfo) {
             if (controller.moveRight && controller.moveLeft) {
                 animator.SetBool(TransitionParameter.move.ToString(), false);
                 return;
@@ -57,17 +56,15 @@ namespace Carpenter.Animation.Player {
 
             if (controller.moveRight) {
                 controller.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                if (CheckFront((MoveController) controller)) {
-                    controller.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(stateInfo.normalizedTime) *
-                                                   Time.deltaTime);
+                if (CheckFront(controller)) {
+                    controller.MoveForward(speed, speedGraph.Evaluate(stateInfo.normalizedTime));
                 }
             }
 
             if (controller.moveLeft) {
                 controller.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-                if (CheckFront((MoveController) controller)) {
-                    controller.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(stateInfo.normalizedTime) *
-                                                   Time.deltaTime);
+                if (CheckFront(controller)) {
+                    controller.MoveForward(speed, speedGraph.Evaluate(stateInfo.normalizedTime));
                 }
             }
         }
@@ -85,6 +82,7 @@ namespace Carpenter.Animation.Player {
                     }
                 }
             }
+
             return true;
         }
 
