@@ -35,12 +35,14 @@ namespace Carpenter.Animation.Player {
             }
 
             // if the character fall down.
-            if (controller.Rigidbody.velocity.y < 0 ) {
+            if (controller.Rigidbody.velocity.y < 0) {
                 foreach (GameObject sphere in controller.bottomSpheres) {
                     // Debug.DrawRay(sphere.transform.position, -Vector3.up * distance, Color.yellow);
                     RaycastHit hit;
                     if (Physics.Raycast(sphere.transform.position, -Vector3.up, out hit, distance)) {
-                        return true;
+                        if (!controller.ragdollParts.Contains(hit.collider)) {
+                            return true;
+                        }
                     }
                 }
             }
