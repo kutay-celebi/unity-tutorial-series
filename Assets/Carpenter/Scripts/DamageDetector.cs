@@ -62,6 +62,10 @@ namespace DefaultNamespace {
             // change animator at runtime.
             controller.skinnedMashAnimator.runtimeAnimatorController = info.attackAbility.GetDeathAnimator();
             info.currentHits++;
+
+            BoxCollider boxCollider = controller.GetComponent<BoxCollider>();
+            boxCollider.enabled             = false;
+            controller.Rigidbody.useGravity = false;
         }
     }
 }

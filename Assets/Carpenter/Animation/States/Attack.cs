@@ -29,7 +29,7 @@ namespace Carpenter.Animation.Player {
             // create an attack info.
             GameObject obj  = Instantiate(Resources.Load("AttackInfo", typeof(GameObject))) as GameObject;
             AttackInfo info = obj.GetComponent<AttackInfo>();
-            info.ResetInfo(this);
+            info.ResetInfo(this,(MoveController) baseBehaviour.GetMoveController(animator));
 
             // added attack info to attack amanager
             if (!AttackManager.Instance.currentAttacks.Contains(info)) {

@@ -25,10 +25,11 @@ namespace DefaultNamespace {
         public bool isRegistered;
         public bool isFinished;
 
-        public void ResetInfo(Attack attack) {
+        public void ResetInfo(Attack attack, MoveController controller) {
             isRegistered  = false;
             isFinished    = false;
             attackAbility = attack;
+            attacker = controller;
         }
 
         public void Register(Attack attack, MoveController controller) {

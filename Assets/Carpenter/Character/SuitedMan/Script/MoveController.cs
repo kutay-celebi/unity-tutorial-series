@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Carpenter.Constants;
 using DefaultNamespace.Controller;
@@ -29,20 +28,6 @@ namespace DefaultNamespace {
         public List<Collider> ragdollParts = new List<Collider>();
         public List<Collider> collidingParts = new List<Collider>();
 
-        // Update is called once per frame
-        void Update() {
-        }
-
-        private void FixedUpdate() {
-            if (Rigidbody.velocity.y < 0f) {
-                Rigidbody.velocity += -Vector3.up * gravityMultiplier;
-            }
-
-            if (Rigidbody.velocity.y > 0f && jump) {
-                Rigidbody.velocity += (-Vector3.up * pullMultiplier);
-            }
-        }
-
         private void Awake() {
             CreateSphereOnSection(Side.BOTTOM, 6, bottomSpheres);
             CreateSphereOnSection(Side.FRONT, 10, frontSpheres);
@@ -57,6 +42,20 @@ namespace DefaultNamespace {
             }
         }
 
+        // Update is called once per frame
+        void Update() {
+        }
+
+        private void FixedUpdate() {
+            if (Rigidbody.velocity.y < 0f) {
+                Rigidbody.velocity += -Vector3.up * gravityMultiplier;
+            }
+
+            if (Rigidbody.velocity.y > 0f && jump) {
+                Rigidbody.velocity += (-Vector3.up * pullMultiplier);
+            }
+        }
+
         private void SetRagdollParts() {
             Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
 
@@ -64,27 +63,9 @@ namespace DefaultNamespace {
                 if (collider.gameObject != gameObject) {
                     collider.isTrigger = true;
                     ragdollParts.Add(collider);
+                    // added trigger detector to each ragdoll collider.
+                    collider.gameObject.AddComponent<ColliderTrigger>();
                 }
-            }
-        }
-
-        private void OnTriggerEnter(Collider other) {
-            if (ragdollParts.Contains(other)) {
-                return;
-            }
-
-            // get the controller of the touched object.
-            MoveController controller = other.transform.root.GetComponent<MoveController>();
-            if (controller != null && other.gameObject != gameObject) {
-                if (!collidingParts.Contains(other)) {
-                    collidingParts.Add(other);
-                }
-            }
-        }
-
-        private void OnTriggerExit(Collider other) {
-            if (collidingParts.Contains(other)) {
-                collidingParts.Remove(other);
             }
         }
 
