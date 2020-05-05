@@ -74,7 +74,7 @@ namespace DefaultNamespace {
             }
 
             // get the controller of the touched object.
-            MoveController controller = transform.GetComponent<MoveController>();
+            MoveController controller = other.transform.root.GetComponent<MoveController>();
             if (controller != null && other.gameObject != gameObject) {
                 if (!collidingParts.Contains(other)) {
                     collidingParts.Add(other);

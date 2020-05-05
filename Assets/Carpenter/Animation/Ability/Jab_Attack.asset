@@ -13,3 +13,13 @@ MonoBehaviour:
   m_Name: Jab_Attack
   m_EditorClassIdentifier: 
   duration: 0
+  startAttackTime: 0.01
+  endAtackTime: 1
+  colliderNames:
+  - RightHand
+  - LeftHand
+  mustCollide: 1
+  mustFaceAttacker: 0
+  lethalRangge: 0
+  maxHits: 0
+  deathAnimators: []
