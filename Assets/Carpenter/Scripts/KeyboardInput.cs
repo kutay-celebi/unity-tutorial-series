@@ -21,7 +21,12 @@ namespace DefaultNamespace {
             } else {
                 VirtualInputManager.Instance.jump = false;
             }
-                
+
+            if (Input.GetKey(KeyCode.Mouse0)) {
+                VirtualInputManager.Instance.attack = true;
+            } else {
+                VirtualInputManager.Instance.attack = false;
+            }
         }
     }
 }

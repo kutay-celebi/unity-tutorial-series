@@ -9,7 +9,8 @@ namespace DefaultNamespace {
         move,
         jump,
         forceTransition,
-        grounded
+        grounded,
+        attack
     }
 
     //todo create base controller.
@@ -24,6 +25,22 @@ namespace DefaultNamespace {
 
         public readonly List<GameObject> bottomSpheres = new List<GameObject>();
         public readonly List<GameObject> frontSpheres = new List<GameObject>();
+        public List<Collider> ragdollParts = new List<Collider>();
+        public List<Collider> collidingParts = new List<Collider>();
+
+        private void Awake() {
+            CreateSphereOnSection(Side.BOTTOM, 6, bottomSpheres);
+            CreateSphereOnSection(Side.FRONT, 10, frontSpheres);
+            SetRagdollParts();
+
+            bool switchBack = !IsFacingForward();
+
+            FaceForward(true);
+
+            if (switchBack) {
+                FaceForward(false);
+            }
+        }
 
         // Update is called once per frame
         void Update() {
@@ -36,6 +53,48 @@ namespace DefaultNamespace {
 
             if (Rigidbody.velocity.y > 0f && jump) {
                 Rigidbody.velocity += (-Vector3.up * pullMultiplier);
+            }
+        }
+
+        private void SetRagdollParts() {
+            Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
+
+            foreach (Collider collider in colliders) {
+                if (collider.gameObject != gameObject) {
+                    collider.isTrigger = true;
+                    ragdollParts.Add(collider);
+                    // added trigger detector to each ragdoll collider.
+                    collider.gameObject.AddComponent<ColliderTrigger>();
+                }
+            }
+        }
+
+        public void MoveForward(float speed, float speedGraph) {
+            transform.Translate(Vector3.forward * speed * speedGraph *Time.deltaTime);
+        }
+
+        public void FaceForward(bool forward) {
+            if (forward) {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            } else {
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            }
+        }
+
+        public bool IsFacingForward() {
+            return transform.forward.z > 0f;
+        }
+
+        public void TurnOnRagdoll() {
+            Rigidbody.useGravity                           = false;
+            Rigidbody.velocity                             = Vector3.zero;
+            gameObject.GetComponent<BoxCollider>().enabled = true;
+            skinnedMashAnimator.enabled                    = false;
+            skinnedMashAnimator.avatar                     = null;
+
+            foreach (Collider part in ragdollParts) {
+                part.isTrigger                  = false;
+                part.attachedRigidbody.velocity = Vector3.zero;
             }
         }
 
@@ -52,12 +111,9 @@ namespace DefaultNamespace {
             }
         }
 
-        private void Awake() {
-            CreateSphereOnSection(Side.BOTTOM, 6, bottomSpheres);
-            CreateSphereOnSection(Side.FRONT, 10, frontSpheres);
-        }
-
-
+        /**
+         * Create spheres to check if this object are touching an other object.
+         */
         private void CreateSphereOnSection(Side side, int point, List<GameObject> sphereList) {
             // get collider center point.
             BoxCollider box    = GetComponent<BoxCollider>();
