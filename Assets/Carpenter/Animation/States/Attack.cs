@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Carpenter.Constants;
+using Carpenter.PooledObject;
 using DefaultNamespace;
 using DefaultNamespace.Managers;
 using UnityEngine;
@@ -9,8 +10,8 @@ namespace Carpenter.Animation.Player {
     public class Attack : BaseStateData {
         public float startAttackTime;
         public float endAtackTime;
-        
-        
+
+
         public List<string> colliderNames = new List<string>();
         public bool mustCollide;
         public bool mustFaceAttacker;
@@ -18,18 +19,21 @@ namespace Carpenter.Animation.Player {
         public int maxHits;
         public List<RuntimeAnimatorController> deathAnimators = new List<RuntimeAnimatorController>();
 
+        private List<AttackInfo> finishedAttacks = new List<AttackInfo>();
+
         public override void UpdateAbility(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
-            RegisterAttack(baseBehaviour,animator,stateInfo);
-            DeRegisterAttack(baseBehaviour,animator,stateInfo);
+            RegisterAttack(baseBehaviour, animator, stateInfo);
+            DeRegisterAttack(baseBehaviour, animator, stateInfo);
         }
 
         public override void OnEnter(BaseStateMachineBehaviour baseBehaviour, Animator animator, AnimatorStateInfo stateInfo) {
             animator.SetBool(TransitionParameter.attack.ToString(), false);
 
             // create an attack info.
-            GameObject obj  = Instantiate(Resources.Load("AttackInfo", typeof(GameObject))) as GameObject;
+            // GameObject obj  = Instantiate(Resources.Load("AttackInfo", typeof(GameObject))) as GameObject; //todo moved pooled object manager.
+            GameObject obj  = PoolObjectManager.Instance.GetObject(PoolObjectType.ATTACK_INFO);
             AttackInfo info = obj.GetComponent<AttackInfo>();
-            info.ResetInfo(this,(MoveController) baseBehaviour.GetMoveController(animator));
+            info.ResetInfo(this, (MoveController) baseBehaviour.GetMoveController(animator));
 
             // added attack info to attack amanager
             if (!AttackManager.Instance.currentAttacks.Contains(info)) {
@@ -64,18 +68,31 @@ namespace Carpenter.Animation.Player {
 
                     if (!info.isFinished && info.attackAbility == this) {
                         info.isFinished = true;
-                        Destroy(info.gameObject);
+
+                        // Destroy(info.gameObject);
+                        info.GetComponent<PoolObject>().TurnOff();
                     }
                 }
             }
         }
 
         public void ClearAttack() {
-            for (var i = 0; i < AttackManager.Instance.currentAttacks.Count; i++) {
-                if (AttackManager.Instance.currentAttacks[i] == null || AttackManager.Instance.currentAttacks[i].isFinished) {
-                    AttackManager.Instance.currentAttacks.RemoveAt(i);
+            finishedAttacks.Clear();
+
+            foreach (AttackInfo info in finishedAttacks) {
+                if (info == null || info.isFinished) {
+                    finishedAttacks.Add(info);
                 }
             }
+
+            foreach (AttackInfo info in finishedAttacks) {
+                AttackManager.Instance.currentAttacks.Remove(info);
+            }
+            // for (var i = 0; i < AttackManager.Instance.currentAttacks.Count; i++) {
+            //     if (AttackManager.Instance.currentAttacks[i] == null || AttackManager.Instance.currentAttacks[i].isFinished) {
+            //         AttackManager.Instance.currentAttacks.RemoveAt(i);
+            //     }
+            // }
         }
 
         public RuntimeAnimatorController GetDeathAnimator() {

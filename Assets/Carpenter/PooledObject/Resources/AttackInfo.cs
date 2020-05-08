@@ -44,5 +44,9 @@ namespace DefaultNamespace {
             maxHits          = attack.maxHits;
             currentHits      = 0;
         }
+
+        private void OnDisable() {
+            isFinished = true;
+        }
     }
 }
