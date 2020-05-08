@@ -4,6 +4,10 @@ using UnityEngine;
 namespace DefaultNamespace {
     public class DamageDetector : MonoBehaviour {
         private MoveController controller;
+        public BodyParts damagedPart;
+
+
+        // private List<ColliderTrigger> colliderTrigers = new List<ColliderTrigger>();
 
         private void Awake() {
             controller = GetComponent<MoveController>();
@@ -47,10 +51,13 @@ namespace DefaultNamespace {
         }
 
         private bool IsCollided(AttackInfo info) {
-            foreach (Collider collider in controller.collidingParts) {
-                foreach (string infoColliderName in info.colliderNames) {
-                    if (collider.gameObject.name == infoColliderName) {
-                        return true;
+            foreach (ColliderTrigger detector in controller.GetAllTriggers()) {
+                foreach (Collider collider in detector.collidingParts) {
+                    foreach (string infoColliderName in info.colliderNames) {
+                        if (collider.gameObject.name == infoColliderName) {
+                            damagedPart = detector.bodyPart;
+                            return true;
+                        }
                     }
                 }
             }
@@ -59,6 +66,8 @@ namespace DefaultNamespace {
         }
 
         private void TakeDamage(AttackInfo info) {
+            Debug.Log(info.attacker.gameObject.name + " attacked to " + controller.gameObject.name + " from " + damagedPart);
+
             // change animator at runtime.
             controller.skinnedMashAnimator.runtimeAnimatorController = info.attackAbility.GetDeathAnimator();
             info.currentHits++;

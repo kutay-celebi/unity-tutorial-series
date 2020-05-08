@@ -26,12 +26,12 @@ namespace DefaultNamespace {
         public readonly List<GameObject> bottomSpheres = new List<GameObject>();
         public readonly List<GameObject> frontSpheres = new List<GameObject>();
         public List<Collider> ragdollParts = new List<Collider>();
-        public List<Collider> collidingParts = new List<Collider>();
+        public List<ColliderTrigger> colliderTriggers = new List<ColliderTrigger>();
 
         private void Awake() {
+            SetRagdollParts();
             CreateSphereOnSection(Side.BOTTOM, 6, bottomSpheres);
             CreateSphereOnSection(Side.FRONT, 10, frontSpheres);
-            SetRagdollParts();
 
             bool switchBack = !IsFacingForward();
 
@@ -56,21 +56,26 @@ namespace DefaultNamespace {
             }
         }
 
-        private void SetRagdollParts() {
+        public void SetRagdollParts() {
+            ragdollParts.Clear();
+
             Collider[] colliders = gameObject.GetComponentsInChildren<Collider>();
 
             foreach (Collider collider in colliders) {
                 if (collider.gameObject != gameObject) {
                     collider.isTrigger = true;
                     ragdollParts.Add(collider);
-                    // added trigger detector to each ragdoll collider.
-                    collider.gameObject.AddComponent<ColliderTrigger>();
+
+                    if (collider.GetComponent<ColliderTrigger>() == null) {
+                        // added trigger detector to each ragdoll collider.
+                        collider.gameObject.AddComponent<ColliderTrigger>();
+                    }
                 }
             }
         }
 
         public void MoveForward(float speed, float speedGraph) {
-            transform.Translate(Vector3.forward * speed * speedGraph *Time.deltaTime);
+            transform.Translate(Vector3.forward * speed * speedGraph * Time.deltaTime);
         }
 
         public void FaceForward(bool forward) {
@@ -154,6 +159,17 @@ namespace DefaultNamespace {
         public GameObject CreateEdgeSphere(Vector3 position) {
             GameObject obj = Instantiate(colliderEdge, position, Quaternion.identity);
             return obj;
+        }
+
+        public List<ColliderTrigger> GetAllTriggers() {
+            if (colliderTriggers.Count == 0) {
+                ColliderTrigger[] triggers = gameObject.GetComponentsInChildren<ColliderTrigger>();
+                foreach (ColliderTrigger trigger in triggers) {
+                    colliderTriggers.Add(trigger);
+                }
+            }
+
+            return colliderTriggers;
         }
     }
 }
